@@ -2,6 +2,7 @@ class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
   def index
     @tasks = Task.all
+    @pagy, @tasks = pagy(Task.all)
   end
 
   def show
@@ -54,5 +55,5 @@ class TasksController < ApplicationController
   def task_params
     params.require(:task).permit(:content, :status)
   end
-
+  
 end
