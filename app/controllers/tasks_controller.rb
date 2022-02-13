@@ -1,9 +1,10 @@
 class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
   before_action :require_user_logged_in
-  before_action :correct_user, only: [:destroy]
+  before_action :correct_user
   
   def index
+    @task = current_user.tasks.build
     @pagy, @tasks = pagy(Task.order(id: :desc), items:3)
   end
 
@@ -19,11 +20,11 @@ class TasksController < ApplicationController
 
     if @task.save
       flash[:success] = 'タスクが作成完了しました'
-      redirect_to root_url
+      redirect_to root_path
     else
       @pagy, @tasks = pagy(current_user.tasks.order(id: :desc))
       flash.now[:danger] = 'タスクが作成されません'
-      render 'toppages/index'
+      render 'tasks/index'
     end
   end
 
